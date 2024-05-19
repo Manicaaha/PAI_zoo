@@ -1,0 +1,76 @@
+<script>
+
+	async function getPet(){
+	
+		let pet = document.getElementById('pet').value
+
+		let response = await request(pet)
+
+		fillInput(response)
+	}
+
+	async function request(pet){
+	
+		let strConnection = 'http://127.0.0.1:3000/animal?' + 'name=' + pet
+		console.log(strConnection)
+		const res = await fetch(strConnection)
+	    return await res.json()
+	}
+
+	async function fillInput(result){
+		
+		generateView(result)
+
+	}
+
+	function generateView(result){
+
+		let mainDiv = document.getElementById("responseDiv")
+			mainDiv.innerHTML = ''
+
+		
+		let img = document.createElement("img")
+			img.src = result["img"]
+			img.width = 200
+			img.height = 200
+		let img2 = document.createElement("img")
+			img2.src = result["img2"]
+			img2.width = 200
+			img2.height = 200
+
+		console.log(Object.keys(result["img"]))
+		console.log(Object.keys(result["img2"]))
+		
+		let p = document.createElement('p')
+		let txt = document.createElement('textarea')
+			txt.innerHTML = result['desc']
+
+		let ul = document.createElement('ul')
+
+		for(let attrName in result['attr']){
+
+			let li = document.createElement('li')
+				li.innerHTML = attrName + ' = ' + result['attr'][attrName]
+			
+			ul.appendChild(li)
+		}
+
+		mainDiv.append(img)
+		mainDiv.append(img2)
+		mainDiv.append(p)
+		mainDiv.append(txt)
+		mainDiv.append(ul)
+
+
+	}
+
+
+</script>
+
+<html>
+
+	<input type = "text" id="pet"> 
+	<button onClick = "getPet()"> Show Pet </button> <br><br><br>
+	<div id="responseDiv"></div>
+
+</html>
